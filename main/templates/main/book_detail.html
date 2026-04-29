@@ -1,0 +1,54 @@
+{% extends "main/base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ book.title }}</h1>
+    <p class="muted">{{ book.author }}</p>
+    {% if book.image_url %}
+        <p><a href="{{ book.image_url }}" target="_blank" rel="noopener">Cover image</a></p>
+    {% endif %}
+    {% if book.description %}
+        <p>{{ book.description }}</p>
+    {% endif %}
+    <p class="muted">ISBN: {{ book.isbn|default:"-" }}</p>
+    <p class="muted">Category: {{ book.category|default:"-" }}</p>
+    <p class="muted">Language: {{ book.language|default:"-" }}</p>
+    <p class="muted">Publisher: {{ book.publisher|default:"-" }}</p>
+</div>
+
+<div class="card">
+    <h2>Store offers</h2>
+    {% if lowest_listing %}
+        <span class="badge">Lowest: LKR {{ lowest_listing.price }}</span>
+    {% endif %}
+
+    {% if listings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Store</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Offer</th>
+                    <th>Buy</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for listing in listings %}
+                    <tr class="{% if lowest_listing and listing.id == lowest_listing.id %}highlight{% endif %}">
+                        <td>{{ listing.store.name }}</td>
+                        <td>LKR {{ listing.price }}</td>
+                        <td>{{ listing.get_stock_status_display }}</td>
+                        <td>{{ listing.discount_text|default:"-" }}</td>
+                        <td><a href="{{ listing.product_url }}" target="_blank" rel="noopener">Buy</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="muted">No listings available for this book yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

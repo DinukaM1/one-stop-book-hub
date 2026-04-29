@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: bookhub-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: bookhub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc123
+    volumes:
+      - bookhub_pgdata:/var/lib/postgresql/data
+
+volumes:
+  bookhub_pgdata:
